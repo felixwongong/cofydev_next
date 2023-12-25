@@ -11,5 +11,9 @@ module.exports = {
       opacity: ['disabled'],
     },
   },
-  plugins: [require("daisyui")]
+  plugins: [require("daisyui")],
+  daisyui: {
+    themes: ["sunset", "retro"],
+    darkTheme: "sunset"
+  }
 }
