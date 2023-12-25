@@ -45,10 +45,10 @@ export default function NavMenu() {
                     <input type="checkbox" className="theme-controller" onChange={getOnChange}/>
 
                     <Image src={"/icons/sun.gif"} width={100} height={100} alt="toggleNightMode"
-                           className="swap-on fill-current"/>
+                           className="swap-off fill-current"/>
 
                     <Image src={"/icons/moon.gif"} width={100} height={100} alt="toggleNightMode"
-                           className="swap-off fill-current"/>
+                           className="swap-on fill-current"/>
                 </label>
             </div>
         </div>

@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import NavMenu from "../components/NavMenu/NavMenu";
 import Image from "next/image";
+import Hero from "../components/Hero/Hero";
 
 const Home: NextPage = () => {
   return (
@@ -12,7 +13,8 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-          <NavMenu></NavMenu>
+          <NavMenu/>
+          <Hero/>
       </main>
 
         <footer className="footer footer-center p-10 text-base">
