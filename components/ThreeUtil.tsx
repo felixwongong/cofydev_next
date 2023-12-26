@@ -1,9 +1,10 @@
 import * as THREE from "three";
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import {CSS2DRenderer} from "three/examples/jsm/renderers/CSS2DRenderer";
 
-export function render(renderer: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera) {
+export function render(renderer: THREE.WebGLRenderer, renderer2D: CSS2DRenderer, scene: THREE.Scene, camera: THREE.Camera) {
     if (!renderer || !scene || !camera) return;
     renderer!.render(scene, camera);
+    renderer2D.render(scene, camera)
 }
 
 export function createCamera(): THREE.PerspectiveCamera {
