@@ -1,12 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import {useTheme} from "next-themes";
+import {ChangeEvent} from "react";
 
 
 export default function NavMenu() {
     const {theme, setTheme} = useTheme();
 
-    function getOnChange(checked) {
+    function getOnChange(checked: ChangeEvent<HTMLInputElement>) {
         checked.target.checked ? setTheme("sunset") : setTheme("retro");
         console.log(theme)
     }
