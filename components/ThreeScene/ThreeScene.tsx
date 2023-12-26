@@ -4,9 +4,6 @@ import {FBXLoader} from "three/examples/jsm/loaders/FBXLoader";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import {Color, Group, Object3D, Quaternion, Vector3} from "three";
 
-
-
-
 export default function ThreeScene() {
     const containerRef = useRef<null | HTMLDivElement>(null);
     const sceneCreated = useRef<boolean>(false);
@@ -126,8 +123,8 @@ export default function ThreeScene() {
                 root.current.add(...obj)
             });
             loadAsset("/asset/lamp_desk.fbx").then(obj => {
-                setPosition(obj, new Vector3(160, 100, -40));
-                setRotation(obj, new Vector3(-1.571, 0, -1))
+                setPosition(obj, new Vector3(175, 100, -40));
+                setRotation(obj, new Vector3(-1.571, 0, -0.5))
                 root.current.add(...obj)
             });
             loadAsset("/asset/monitor.fbx").then(obj => {
@@ -147,6 +144,12 @@ export default function ThreeScene() {
             });
             loadAsset("/asset/mousepad_large_A.fbx").then(obj => {
                 setPosition(obj, new Vector3(0, 100, 30));
+                root.current.add(...obj)
+            });
+
+            loadAsset("/asset/chair_desk_A.fbx").then(obj => {
+                setPosition(obj, new Vector3(0, 0, 90));
+                setRotation(obj, new Vector3(-1.571, 0, 3))
                 root.current.add(...obj)
             });
 
