@@ -12,7 +12,7 @@ export default function NavMenu() {
     }
 
     return (
-        <div className="absolute navbar bg-base-100">
+        <div className="absolute navbar bg-base-100 z-40">
             <div className="navbar-start">
                 <div className="dropdown">
                     <label tabIndex="0" className="btn btn-ghost lg:hidden">
