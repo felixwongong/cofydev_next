@@ -35,14 +35,32 @@ export default function ThreeScene() {
 
     function createRenderer() {
         renderer.current = new THREE.WebGLRenderer({alpha: true});
-        renderer.current!.setSize(window.innerWidth, window.innerHeight);
+        //Absolute such that container size would restricted by canvas size
+        renderer.current!.domElement.classList.add("absolute");
         containerRef.current?.appendChild(renderer.current!.domElement);
+        onContainerResize()
+    }
+
+    function onContainerResize() {
+        console.log("Resizing 3D canvas")
+        if(renderer.current == null){
+            console.error("canvas renderer not found");
+            return;
+        }
+
+        const width = containerRef.current!.offsetWidth;
+        const height = containerRef.current!.offsetHeight;
+
+        renderer.current!.setSize(width,height);
+        camera.current!.aspect = width / height;
+        camera.current!.updateProjectionMatrix();
     }
 
     function createOrbital() {
         controls.current = new OrbitControls(camera.current!, renderer.current!.domElement)
         controls.current!.enableDamping = true
         controls.current!.autoRotate = true;
+        controls.current!.enablePan = false;
     }
 
     function animate() {
@@ -86,6 +104,7 @@ export default function ThreeScene() {
             createScene()
             createCamera()
             createRenderer()
+            window.addEventListener("resize", onContainerResize);
             createOrbital()
             loader.current = new FBXLoader()
             root.current.name = "root";
@@ -95,7 +114,6 @@ export default function ThreeScene() {
 
             const ambient = new THREE.AmbientLight(0xF3E1BF, 5);
             scene.current!.add(ambient)
-
 
             loadAsset("/asset/desk_large.fbx").then(obj => root.current.add(...obj));
             loadAsset("/asset/keyboard.fbx").then(obj => {
@@ -138,6 +156,6 @@ export default function ThreeScene() {
 
 
     return (
-        <div ref={containerRef}/>
+        <div ref={containerRef} className="w-full h-full"/>
     )
 }
