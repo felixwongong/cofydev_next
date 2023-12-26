@@ -2,7 +2,7 @@ import RoomScene from "../RoomScene/RoomScene";
 import {AnimatePresence, motion} from "framer-motion";
 import {globalHeroContext, HeroState} from "../HeroState";
 import {useState} from "react";
-
+import styles from "./Hero.module.css";
 
 export default function Hero() {
     const [state, setState] = useState<HeroState>(HeroState.Initial);
@@ -14,7 +14,7 @@ export default function Hero() {
             </globalHeroContext.Provider>
             {state == HeroState.Initial &&
                 <AnimatePresence>
-                    <motion.div className="hero-content text-center fixed bottom-60"
+                    <motion.div className={`hero-content text-center ${styles.bottomCenter}`}
                                 initial={{opacity: 0}}
                                 animate={{opacity: 1}}
                                 exit={{opacity: 1}}
