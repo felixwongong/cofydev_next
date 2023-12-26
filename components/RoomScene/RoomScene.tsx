@@ -56,7 +56,8 @@ export default function RoomScene() {
     }
 
     function loadAsset(path: string): Promise<Object3D[]> {
-        let resolveFunc, rejectFunc;
+        let resolveFunc: (value: Object3D[]) => void;
+        let rejectFunc: (reason?: any) => void;
         const loadPromise = new Promise<Object3D[]>((resolve, reject) => {
             resolveFunc = resolve;
             rejectFunc = reject;
