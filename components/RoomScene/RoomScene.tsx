@@ -1,14 +1,17 @@
-import {useEffect, useRef} from "react";
+import {useContext, useEffect, useRef} from "react";
 import * as THREE from "three";
+import {Group, Object3D, Vector3} from "three";
 import "../ThreeUtil";
 import {FBXLoader} from "three/examples/jsm/loaders/FBXLoader";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import {Color, Group, Object3D, Quaternion, Vector3} from "three";
-import {render, createCamera, setPosition, setRotation} from "../ThreeUtil";
+import {createCamera, render, setPosition, setRotation} from "../ThreeUtil";
 import {CSS2DObject, CSS2DRenderer} from "three/examples/jsm/renderers/CSS2DRenderer";
 import Tween from "three/examples/jsm/libs/tween.module";
+import {globalHeroContext, HeroState} from "../HeroState";
 
 export default function RoomScene() {
+    const {state, setState} = useContext(globalHeroContext);
+
     const containerRef = useRef<null | HTMLDivElement>(null);
     const sceneCreated = useRef<boolean>(false);
 
@@ -144,10 +147,6 @@ export default function RoomScene() {
         doorRoot.current.scale.set(0, 0, 0);
         scene.current!.add(doorRoot.current);
         camera.current!.position.z = 10;
-        controls.current!.target = doorRoot.current.position;
-        controls.current!.autoRotate = false;
-        controls.current!.enableRotate = false;
-        controls.current!.enableZoom = false;
 
         loadAsset("/asset/Door_A.fbx").then(obj => {
             setPosition(obj, new Vector3(-80, 0, 0))
@@ -180,7 +179,6 @@ export default function RoomScene() {
             camera.current = createCamera()
             createRenderer()
             window.addEventListener("resize", onContainerResize);
-            controls.current = createOrbital()
             loader.current = new FBXLoader()
 
             const ambient = new THREE.AmbientLight(0xF3E1BF, 5);
@@ -190,7 +188,16 @@ export default function RoomScene() {
 
             animate()
         }
-    }, []);
+
+        if(state) {
+            if (state == HeroState.Opened) {
+                new Tween.Tween(camera.current!.position)
+                    .to({x: 0, y: 2, z: 4.5}, 1000)
+                    .easing(Tween.Easing.Quadratic.InOut)
+                    .start();
+            }
+        }
+    }, [state]);
 
 
     return (

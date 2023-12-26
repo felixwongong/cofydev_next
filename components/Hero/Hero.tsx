@@ -1,11 +1,33 @@
 import RoomScene from "../RoomScene/RoomScene";
+import {AnimatePresence, motion} from "framer-motion";
+import {globalHeroContext, HeroState} from "../HeroState";
 import {useState} from "react";
 
+
 export default function Hero() {
-    const [opened, setOpened] = useState<boolean>(false);
+    const [state, setState] = useState<HeroState>(HeroState.Initial);
+
     return (
         <div className="hero min-h-screen bg-base-200">
-            {!opened ? <RoomScene/>: <div/>}
+            <globalHeroContext.Provider value={{state, setState}}>
+                <RoomScene/>
+            </globalHeroContext.Provider>
+            {state == HeroState.Initial &&
+                <AnimatePresence>
+                    <motion.div className="hero-content text-center fixed bottom-60"
+                                initial={{opacity: 0}}
+                                animate={{opacity: 1}}
+                                exit={{opacity: 1}}
+                    >
+                        <div>
+                            <h1 className="text-5xl font-bold">Hello From CofyDev</h1>
+                            <p className="py-6">Here is a place you can play around, and know more about me.</p>
+                            <button className="btn btn-primary" onClick={() => setState(HeroState.Opened)}>Get Started
+                            </button>
+                        </div>
+                    </motion.div>
+                </AnimatePresence>
+            }
         </div>
     )
 }
