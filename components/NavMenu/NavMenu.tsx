@@ -29,7 +29,7 @@ export default function NavMenu() {
                         <li><Link href={"/"}>📖Post</Link></li>
                     </ul>
                 </div>
-                <a className="btn btn-ghost normal-case text-xl" href="/pages">Felix Wong☕</a>
+                <Link className="btn btn-ghost normal-case text-xl" href={"/"}>Felix Wong☕</Link>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
