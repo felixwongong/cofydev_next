@@ -3,7 +3,7 @@ import {createContext} from "react";
 export enum HeroState {
     Initial,
     Started,
-    Opened,
+    DoorOpened
 }
 
 export type HeroContent = {

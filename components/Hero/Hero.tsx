@@ -22,7 +22,7 @@ export default function Hero() {
                         <div>
                             <h1 className="text-5xl font-bold">Hello From CofyDev</h1>
                             <p className="py-6">Here is a place you can play around, and know more about me.</p>
-                            <button className="btn btn-primary" onClick={() => setState(HeroState.Opened)}>Get Started
+                            <button className="btn btn-primary" onClick={() => setState(HeroState.Started)}>Get Started
                             </button>
                         </div>
                     </motion.div>

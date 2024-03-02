@@ -190,7 +190,7 @@ export default function RoomScene() {
         }
 
         if(state) {
-            if (state == HeroState.Opened) {
+            if (state == HeroState.Started) {
                 new Tween.Tween(camera.current!.position)
                     .to({x: 0, y: 2, z: 4.5}, 1000)
                     .easing(Tween.Easing.Quadratic.InOut)
