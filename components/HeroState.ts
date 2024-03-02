@@ -1,7 +1,7 @@
 import {createContext} from "react";
 
 export enum HeroState {
-    Initial,
+    Awake,
     Started,
     DoorOpened
 }
@@ -12,6 +12,6 @@ export type HeroContent = {
 }
 
 export const globalHeroContext = createContext<HeroContent>({
-    state: HeroState.Initial,
+    state: HeroState.Awake,
     setState: () => {}
 });

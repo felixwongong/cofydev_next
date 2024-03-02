@@ -6,7 +6,7 @@ import {useState} from "react";
 import styles from "./Hero.module.css";
 
 export default function Hero() {
-    const [state, setState] = useState<HeroState>(HeroState.Initial);
+    const [state, setState] = useState<HeroState>(HeroState.Awake);
 
     return (
         <div className="hero min-h-screen bg-base-200">
@@ -15,7 +15,7 @@ export default function Hero() {
                     <DoorScene/>
                 </ThreeScene>
             </globalHeroContext.Provider>
-            {state == HeroState.Initial &&
+            {state == HeroState.Awake &&
                 <AnimatePresence>
                     <motion.div className={`hero-content text-center ${styles.bottomCenter}`}
                                 initial={{opacity: 0}}
