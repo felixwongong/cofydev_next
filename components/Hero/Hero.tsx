@@ -1,4 +1,5 @@
-import RoomScene from "../RoomScene/RoomScene";
+import ThreeScene from "../ThreeScene/ThreeScene";
+import DoorScene from "../HeroScenes/DoorScene";
 import {AnimatePresence, motion} from "framer-motion";
 import {globalHeroContext, HeroState} from "../HeroState";
 import {useState} from "react";
@@ -10,7 +11,9 @@ export default function Hero() {
     return (
         <div className="hero min-h-screen bg-base-200">
             <globalHeroContext.Provider value={{state, setState}}>
-                <RoomScene/>
+                <ThreeScene>
+                    <DoorScene/>
+                </ThreeScene>
             </globalHeroContext.Provider>
             {state == HeroState.Initial &&
                 <AnimatePresence>
