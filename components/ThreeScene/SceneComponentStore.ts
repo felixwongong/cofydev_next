@@ -11,7 +11,7 @@ export enum ComponentType {
     Control,
 }
 
-interface ComponentMap {
+type ComponentMap = {
     [key: ComponentType]: MutableRefObject<any>;
 }
 
