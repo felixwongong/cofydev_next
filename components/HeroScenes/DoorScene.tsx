@@ -1,6 +1,6 @@
 import {useCompStore} from "../ThreeScene/ThreeScene";
 import {Camera, Group, Scene, Vector3} from "three";
-import {useContext, useEffect, useRef} from "react";
+import {useCallback, useContext, useEffect, useRef} from "react";
 import {ComponentType} from "../ThreeScene/SceneComponentStore";
 import {setPosition} from "../ThreeUtil";
 import Tween from "three/examples/jsm/libs/tween.module";
@@ -9,10 +9,10 @@ import {globalHeroContext, HeroState} from "../HeroState";
 
 export default function DoorScene() {
     const {state, setState} = useContext(globalHeroContext);
-    const compStore = useCompStore();
+    const compStore = useCompStore()!;
     const doorRoot = useRef<Group>(new Group());
 
-    function loadDoor() {
+    const loadDoor = useCallback(() => {
         const scene: Scene = compStore.getData(ComponentType.Scene).current!;
         const camera: Camera = compStore.getData(ComponentType.Camera).current!;
         const assetLoader = compStore.assetLoader;
@@ -44,15 +44,16 @@ export default function DoorScene() {
             clickableIconLabel.position.set(70, 70, 0);
             doorRoot.current!.add(clickableIconLabel);
         });
-    }
+    }, [compStore]);
+
 
     useEffect(() => {
         return () => {
-            if(state == HeroState.Awake) {
+            if (state == HeroState.Awake) {
                 loadDoor()
             }
         };
-    }, [state]);
+    }, [state, compStore, loadDoor]);
 
 
     return (

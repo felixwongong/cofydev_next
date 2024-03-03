@@ -1,4 +1,4 @@
-import {createContext, useContext, useEffect, useRef} from "react";
+import {createContext, ReactNode, useContext, useEffect, useRef} from "react";
 import * as THREE from "three";
 import {Group, Object3D} from "three";
 import "../ThreeUtil";
@@ -10,12 +10,12 @@ import Tween from "three/examples/jsm/libs/tween.module";
 import {globalHeroContext, HeroState} from "../HeroState";
 import SceneComponentStore, {ComponentType} from "./SceneComponentStore";
 
-const compStoreCxt = createContext<SceneComponentStore>(new SceneComponentStore())
+const compStoreCxt = createContext<SceneComponentStore | null>(null);
 export const useCompStore = () => useContext(compStoreCxt)
 
-export default function ThreeScene({children}) {
+export default function ThreeScene({ children }: { children?: ReactNode }) {
     const {state, setState} = useContext(globalHeroContext);
-    const compStore = useRef<SceneComponentStore>(new SceneComponentStore());
+    const compStore = useRef<SceneComponentStore>(new SceneComponentStore(loadAsset));
 
     const containerRef = useRef<null | HTMLDivElement>(null);
     const sceneCreated = useRef<boolean>(false);
@@ -27,18 +27,7 @@ export default function ThreeScene({children}) {
     const controls = useRef<null | OrbitControls>(null);
     const loader = useRef<null | FBXLoader>(null);
 
-    function createRenderer() {
-        renderer.current = new THREE.WebGLRenderer({alpha: true});
-        //Absolute such that container size would restricted by canvas size
-        renderer.current!.domElement.classList.add("absolute");
-        containerRef.current?.appendChild(renderer.current!.domElement);
 
-        renderer2D.current = new CSS2DRenderer();
-        renderer.current!.domElement.classList.add("absolute");
-        containerRef.current?.appendChild(renderer2D.current!.domElement);
-
-        onContainerResize()
-    }
 
     function onContainerResize() {
         console.log("Resizing 3D canvas")
@@ -64,18 +53,55 @@ export default function ThreeScene({children}) {
         return controls;
     }
 
-    function animate() {
-        requestAnimationFrame(animate);
 
-        if(controls.current != null) {
-            controls.current!.update()
-        }
-        Tween.update()
 
-        render(renderer.current!, renderer2D.current!, scene.current!, camera.current!)
+    function loadAsset(path: string) {
+        let resolveFunc: (value: Object3D[]) => void;
+        let rejectFunc: (reason?: any) => void;
+        const loadPromise = new Promise<Object3D[]>((resolve, reject) => {
+            resolveFunc = resolve;
+            rejectFunc = reject;
+        });
+        loader.current!.load(
+            path,
+            (object) => {
+                resolveFunc (object.children)
+            },
+            (xhr) => {
+                console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+            },
+            (error) => {
+                console.log(error)
+            }
+        )
+        return loadPromise;
     }
 
     useEffect(() => {
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if(controls.current != null) {
+                controls.current!.update()
+            }
+            Tween.update()
+
+            render(renderer.current!, renderer2D.current!, scene.current!, camera.current!)
+        }
+
+        function createRenderer() {
+            renderer.current = new THREE.WebGLRenderer({alpha: true});
+            //Absolute such that container size would restricted by canvas size
+            renderer.current!.domElement.classList.add("absolute");
+            containerRef.current?.appendChild(renderer.current!.domElement);
+
+            renderer2D.current = new CSS2DRenderer();
+            renderer.current!.domElement.classList.add("absolute");
+            containerRef.current?.appendChild(renderer2D.current!.domElement);
+
+            onContainerResize()
+        }
+
         if (!sceneCreated.current && typeof window !== "undefined") {
             //Initialization
             sceneCreated.current = true
@@ -89,27 +115,6 @@ export default function ThreeScene({children}) {
             const ambient = new THREE.AmbientLight(0xF3E1BF, 5);
             scene.current!.add(ambient)
 
-            compStore.current.assetLoader = path => {
-                let resolveFunc: (value: Object3D[]) => void;
-                let rejectFunc: (reason?: any) => void;
-                const loadPromise = new Promise<Object3D[]>((resolve, reject) => {
-                    resolveFunc = resolve;
-                    rejectFunc = reject;
-                });
-                loader.current!.load(
-                    path,
-                    (object) => {
-                        resolveFunc (object.children)
-                    },
-                    (xhr) => {
-                        console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
-                    },
-                    (error) => {
-                        console.log(error)
-                    }
-                )
-                return loadPromise;
-            };
             compStore.current.setData(ComponentType.Camera, camera);
             compStore.current.setData(ComponentType.Scene, scene);
             compStore.current.setData(ComponentType.Renderer, renderer);

@@ -1,19 +1,17 @@
 import {useCompStore} from "../ThreeScene/ThreeScene";
 import {Camera, Group, Scene, Vector3} from "three";
-import {useContext, useEffect, useRef} from "react";
+import {useCallback, useContext, useEffect, useRef} from "react";
 import {ComponentType} from "../ThreeScene/SceneComponentStore";
 import {setPosition, setRotation} from "../ThreeUtil";
-import Tween from "three/examples/jsm/libs/tween.module";
-import {CSS2DObject} from "three/examples/jsm/renderers/CSS2DRenderer";
 import {globalHeroContext, HeroState} from "../HeroState";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 
 export default function RoomScene() {
     const {state, setState} = useContext(globalHeroContext);
-    const compStore = useCompStore();
+    const compStore = useCompStore()!;
     const roomRoot = useRef<Group>(new Group());
 
-    function loadRoom() {
+    const loadRoom = useCallback(() => {
         const scene: Scene = compStore.getData(ComponentType.Scene).current!;
         const camera: Camera = compStore.getData(ComponentType.Camera).current!;
         const controls: OrbitControls = compStore.getData(ComponentType.Control).current!;
@@ -64,15 +62,15 @@ export default function RoomScene() {
             setRotation(obj, new Vector3(-1.571, 0, 3))
             roomRoot.current.add(...obj)
         });
-    }
+    }, [compStore]);
 
     useEffect(() => {
         return () => {
-            if(state == HeroState.Awake) {
+            if (state == HeroState.Awake) {
                 loadRoom();
             }
         };
-    }, [state]);
+    }, [state, loadRoom]);
 
 
     return (

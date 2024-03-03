@@ -3,24 +3,22 @@ import {Object3D} from "three";
 
 export enum ComponentType {
     Camera,
-    Light,
-    Mesh,
-    Group,
     Scene,
     Renderer,
     Control,
 }
 
 type ComponentMap = {
-    [key: ComponentType]: MutableRefObject<any>;
+    [key in ComponentType]: MutableRefObject<any>;
 }
 
 class SceneComponentStore {
     public data: ComponentMap;
     public assetLoader: (path: string) => Promise<Object3D[]>;
 
-    constructor() {
-        this.data = {}
+    constructor(assetLoader: (path: string) => Promise<Object3D[]>) {
+        this.data = { } as ComponentMap;
+        this.assetLoader = assetLoader;
     }
 
     setData(key: ComponentType, value: MutableRefObject<any>): void{
