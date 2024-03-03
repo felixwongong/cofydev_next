@@ -11,8 +11,12 @@ export enum ComponentType {
     Control,
 }
 
+type ComponentMap = {
+    [key: ComponentType]: MutableRefObject<any>;
+}
+
 class SceneComponentStore {
-    public data: {};
+    public data: ComponentMap;
     public assetLoader: (path: string) => Promise<Object3D[]>;
 
     constructor() {
