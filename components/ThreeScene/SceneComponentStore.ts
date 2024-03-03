@@ -13,7 +13,7 @@ export enum ComponentType {
 
 class SceneComponentStore {
     public data: {};
-    public assetLoader;
+    public assetLoader: (path: string) => Promise<Object3D[]>;
 
     constructor() {
         this.data = {}
